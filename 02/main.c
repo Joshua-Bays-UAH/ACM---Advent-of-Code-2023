@@ -16,12 +16,14 @@ int main(){
 	FILE* readfile = fopen(Filename, "r");
 	char buff[256]; char line[256];
 	unsigned r, g, b; _Bool valid;
-	unsigned ret = 0;
+	unsigned ret1 = 0; unsigned ret2 = 0;
+	unsigned maxes[3];
 	
 	for(unsigned i = 0; i < 100; i++){
 		for(unsigned j = 0; j <= sizeof(buff); j++){ buff[j] = '\0'; line[j] = '\0'; }
+		for(unsigned j = 0; j < 3; j++){ maxes[j] = 0; }
 		fgets(buff, sizeof(buff), readfile); buff[strlen(buff) - 1] = '\0';
-		strcpy(line, strchr(buff, ':')+2);
+		strcpy(line, strchr(buff, ':') + 2);
 		printf("%s\n", line);
 		r = 0; g = 0; b = 0;
 		valid = 1;
@@ -46,11 +48,14 @@ int main(){
 				}
 			}
 			if(r > RedMax || g > GreenMax || b > BlueMax){ valid = 0; }
+			if(r > maxes[0]){ maxes[0] = r; } if(g > maxes[1]){ maxes[1] = g; } if(b > maxes[2]){ maxes[2] = b; }
 		}
 		printf("\t%u, %u, %u\n", r, g, b);
-		if(valid){ ret += (i + 1); }
+		if(valid){ ret1 += (i + 1); }
+		ret2 += (maxes[0] * maxes[1] * maxes[2]);
 	}
 	
-	printf("%u\n", ret);
+	printf("%u\n", ret1);
+	printf("%u\n", ret2);
 	return 0;
 }
